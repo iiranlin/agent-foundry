@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { AgentRecord } from '@/features/agents/AgentTypes';
+import { parseMcpConnectorConfig } from '@/features/agents/McpConfig';
 import { useRouter } from '@/libs/I18nNavigation';
 import { MarkdownMessage } from './MarkdownMessage';
 
@@ -25,18 +26,6 @@ const emptySource: DraftSource = {
   url: '',
   content: '',
 };
-
-const draftSourceTypes: DraftSource['type'][] = [
-  'text',
-  'markdown',
-  'file',
-  'github',
-  'url',
-  'online-skill',
-];
-
-const isDraftSourceType = (value: string): value is DraftSource['type'] =>
-  draftSourceTypes.some((sourceType) => sourceType === value);
 
 const isAgentRecord = (value: unknown): value is AgentRecord => {
   if (!value || typeof value !== 'object') {
@@ -116,6 +105,29 @@ const updateAgentMessage = (options: {
     };
   });
 
+const formatMcpSummary = (config: string, fallback: string) => {
+  const parsedConfig = parseMcpConnectorConfig(config);
+
+  if (!parsedConfig) {
+    return fallback;
+  }
+
+  const serverNames = Object.keys(parsedConfig.mcpServers);
+
+  if (serverNames.length === 0) {
+    return fallback;
+  }
+
+  return serverNames.join(', ');
+};
+
+const RequiredLabel = (props: { children: React.ReactNode; requiredText: string }) => (
+  <span>
+    {props.children}
+    <span className="ml-1 text-red-600">{props.requiredText}</span>
+  </span>
+);
+
 // eslint-disable-next-line complexity
 export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
   const t = useTranslations('AgentWorkspace');
@@ -137,7 +149,6 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
   const isBusy = isSubmitting || isStreaming;
   const canCreateAgent =
     agentName.trim().length > 0 &&
-    draftSource.label.trim().length > 0 &&
     (draftSource.content.trim().length > 0 || draftSource.url.trim().length > 0);
   const latestSkill = selectedAgent?.skills[0];
 
@@ -391,52 +402,23 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
               className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4"
               onSubmit={handleCreateAgent}
             >
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                <div>
-                  <label className="text-xs font-medium text-slate-600" htmlFor="agent-name">
+              <div>
+                <label className="text-xs font-medium text-slate-600" htmlFor="agent-name">
+                  <RequiredLabel requiredText={t('required_indicator')}>
                     {t('agent_name_label')}
-                  </label>
-                  <input
-                    id="agent-name"
-                    type="text"
-                    aria-label={t('agent_name_label')}
-                    className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
-                    value={agentName}
-                    onChange={(event) => {
-                      setAgentName(event.currentTarget.value);
-                    }}
-                    placeholder={t('agent_name_placeholder')}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-medium text-slate-600" htmlFor="source-type">
-                    {t('source_type_label')}
-                  </label>
-                  <select
-                    id="source-type"
-                    aria-label={t('source_type_label')}
-                    className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
-                    value={draftSource.type}
-                    onChange={(event) => {
-                      if (!isDraftSourceType(event.currentTarget.value)) {
-                        return;
-                      }
-
-                      setDraftSource({
-                        ...draftSource,
-                        type: event.currentTarget.value,
-                      });
-                    }}
-                  >
-                    <option value="markdown">{t('source_type_markdown')}</option>
-                    <option value="text">{t('source_type_text')}</option>
-                    <option value="file">{t('source_type_file')}</option>
-                    <option value="github">{t('source_type_github')}</option>
-                    <option value="url">{t('source_type_url')}</option>
-                    <option value="online-skill">{t('source_type_online_skill')}</option>
-                  </select>
-                </div>
+                  </RequiredLabel>
+                </label>
+                <input
+                  id="agent-name"
+                  type="text"
+                  aria-label={t('agent_name_label')}
+                  className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
+                  value={agentName}
+                  onChange={(event) => {
+                    setAgentName(event.currentTarget.value);
+                  }}
+                  placeholder={t('agent_name_placeholder')}
+                />
               </div>
 
               <div>
@@ -455,46 +437,25 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
                 />
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                <div>
-                  <label className="text-xs font-medium text-slate-600" htmlFor="source-label">
-                    {t('source_label_label')}
-                  </label>
-                  <input
-                    id="source-label"
-                    type="text"
-                    aria-label={t('source_label_label')}
-                    className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
-                    value={draftSource.label}
-                    onChange={(event) => {
-                      setDraftSource({
-                        ...draftSource,
-                        label: event.currentTarget.value,
-                      });
-                    }}
-                    placeholder={t('source_label_placeholder')}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-medium text-slate-600" htmlFor="source-url">
-                    {t('source_url_label')}
-                  </label>
-                  <input
-                    id="source-url"
-                    type="url"
-                    aria-label={t('source_url_label')}
-                    className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
-                    value={draftSource.url}
-                    onChange={(event) => {
-                      setDraftSource({
-                        ...draftSource,
-                        url: event.currentTarget.value,
-                      });
-                    }}
-                    placeholder={t('source_url_placeholder')}
-                  />
-                </div>
+              <div>
+                <label className="text-xs font-medium text-slate-600" htmlFor="source-url">
+                  {t('source_url_label')}
+                </label>
+                <input
+                  id="source-url"
+                  type="url"
+                  aria-label={t('source_url_label')}
+                  className="mt-1 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
+                  value={draftSource.url}
+                  onChange={(event) => {
+                    setDraftSource({
+                      ...draftSource,
+                      type: event.currentTarget.value ? 'url' : 'markdown',
+                      url: event.currentTarget.value,
+                    });
+                  }}
+                  placeholder={t('source_url_placeholder')}
+                />
               </div>
 
               <div>
@@ -513,7 +474,9 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
 
               <div>
                 <label className="text-xs font-medium text-slate-600" htmlFor="source-content">
-                  {t('source_content_label')}
+                  <RequiredLabel requiredText={t('required_or_url_indicator')}>
+                    {t('source_content_label')}
+                  </RequiredLabel>
                 </label>
                 <textarea
                   id="source-content"
@@ -553,11 +516,10 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
                   }}
                   placeholder={t('online_skill_placeholder')}
                 />
-                <input
+                <textarea
                   id="mcp-connector-url"
-                  type="url"
                   aria-label={t('mcp_connector_placeholder')}
-                  className="w-full rounded-sm border border-slate-200 bg-white px-3 py-2 text-sm focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
+                  className="min-h-28 w-full rounded-sm border border-slate-200 bg-white px-3 py-2 font-mono text-xs leading-5 focus:ring-3 focus:ring-blue-200/70 focus:outline-hidden"
                   value={mcpConnectorUrl}
                   onChange={(event) => {
                     setMcpConnectorUrl(event.currentTarget.value);
@@ -588,12 +550,15 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
                     {latestSkill.summary}
                   </p>
                 </div>
-                <pre
-                  className="max-h-64 min-h-0 overflow-auto rounded-md border border-slate-200 bg-slate-950 p-3 font-mono text-xs leading-5 [overflow-wrap:anywhere] break-words whitespace-pre-wrap text-slate-100"
+                <div
+                  className="max-h-64 min-h-0 overflow-auto rounded-md border border-slate-200 bg-slate-50 p-3"
                   data-testid="agent-skill-content"
                 >
-                  {latestSkill.content}
-                </pre>
+                  <MarkdownMessage
+                    content={latestSkill.content}
+                    thoughtLabel={t('thinking_label')}
+                  />
+                </div>
               </div>
             ) : (
               <p className="p-4 text-sm leading-6 text-slate-500">{t('empty_skill')}</p>
@@ -642,7 +607,7 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
                   <div className="rounded-sm border border-slate-800 bg-slate-900 px-3 py-2">
                     <span className="font-medium text-slate-200">{t('mcp_metric')}</span>
                     <div className="truncate">
-                      {selectedAgent.mcpConnectorUrl || t('not_connected')}
+                      {formatMcpSummary(selectedAgent.mcpConnectorUrl, t('not_connected'))}
                     </div>
                   </div>
                 </div>
@@ -677,6 +642,7 @@ export const AgentWorkspace = (props: { initialAgents: AgentRecord[] }) => {
                                 message.content ||
                                 (message.id === streamingMessageId ? t('streaming_label') : '')
                               }
+                              thoughtLabel={t('thinking_label')}
                             />
                           ) : (
                             <div className="[overflow-wrap:anywhere] break-words whitespace-pre-wrap">

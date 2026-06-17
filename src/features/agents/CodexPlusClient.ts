@@ -1,4 +1,5 @@
 import { Env } from '@/libs/Env';
+import { formatMcpConfigForPrompt } from './McpConfig';
 
 type ChatMessage = {
   content: string;
@@ -73,6 +74,7 @@ const getCodexPlusConfig = (endpointOverride: string) => {
 
 const buildMessages = (options: {
   agentName: string;
+  mcpConnectorConfig: string;
   question: string;
   skillContent: string;
   skillSummary: string;
@@ -87,6 +89,9 @@ const buildMessages = (options: {
       '',
       `Skill summary:\n${options.skillSummary}`,
       '',
+      `Configured MCP servers:\n${formatMcpConfigForPrompt(options.mcpConnectorConfig)}`,
+      'Do not claim MCP tool execution unless a later tool invocation result is explicitly provided.',
+      '',
       `Skill content:\n${options.skillContent.slice(0, MAX_SKILL_CONTEXT_CHARS)}`,
     ].join('\n'),
   },
@@ -99,6 +104,7 @@ const buildMessages = (options: {
 export const requestCodexPlusAnswer = async (options: {
   agentName: string;
   endpointOverride: string;
+  mcpConnectorConfig?: string;
   question: string;
   skillContent: string;
   skillSummary: string;
@@ -118,7 +124,10 @@ export const requestCodexPlusAnswer = async (options: {
       },
       body: JSON.stringify({
         model: config.model,
-        messages: buildMessages(options),
+        messages: buildMessages({
+          ...options,
+          mcpConnectorConfig: options.mcpConnectorConfig ?? '',
+        }),
         temperature: 0.2,
       }),
       signal: AbortSignal.timeout(30_000),
@@ -149,6 +158,7 @@ export const requestCodexPlusAnswer = async (options: {
 export async function* streamCodexPlusAnswer(options: {
   agentName: string;
   endpointOverride: string;
+  mcpConnectorConfig?: string;
   question: string;
   skillContent: string;
   skillSummary: string;
@@ -168,7 +178,10 @@ export async function* streamCodexPlusAnswer(options: {
       },
       body: JSON.stringify({
         model: config.model,
-        messages: buildMessages(options),
+        messages: buildMessages({
+          ...options,
+          mcpConnectorConfig: options.mcpConnectorConfig ?? '',
+        }),
         stream: true,
         temperature: 0.2,
       }),

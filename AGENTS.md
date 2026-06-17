@@ -12,6 +12,7 @@
 - Let compiler infer return types unless annotation adds clarity.
 - Options object for 3+ params, optional flags, or ambiguous args.
 - Hypothesis-driven debugging: 1-3 causes, validate most likely first.
+- Agent context intake should stay simple: uploaded data is context for the Agent, required fields must be explicit, and training should expose only a concise expandable thought process.
 
 ## Token efficiency
 - Skip recaps unless the result is ambiguous or you need more input.

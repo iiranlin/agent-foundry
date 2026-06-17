@@ -23,12 +23,19 @@ export type MarkdownBlock =
       type: 'quote';
     }
   | {
+      text: string;
+      type: 'thought';
+    }
+  | {
       type: 'divider';
     };
 
 const headingPattern = /^(#{1,3})\s+(.+)$/u;
 const orderedListPattern = /^\d+\.\s+(.+)$/u;
 const unorderedListPattern = /^[-*]\s+(.+)$/u;
+const thoughtOpenPattern = /^<(thinking|thought)>$/iu;
+const thoughtClosePattern = /^<\/(thinking|thought)>$/iu;
+const thoughtFenceLanguages = new Set(['reasoning', 'thought', 'thinking']);
 
 const flushParagraph = (options: { blocks: MarkdownBlock[]; lines: string[] }) => {
   if (options.lines.length === 0) {
@@ -82,10 +89,36 @@ export const parseMarkdownBlocks = (content: string): MarkdownBlock[] => {
         index += 1;
       }
 
+      if (thoughtFenceLanguages.has(language.toLowerCase())) {
+        blocks.push({
+          type: 'thought',
+          text: codeLines.join('\n'),
+        });
+      } else {
+        blocks.push({
+          type: 'code',
+          language,
+          code: codeLines.join('\n'),
+        });
+      }
+
+      index += 1;
+      continue;
+    }
+
+    if (thoughtOpenPattern.test(trimmedLine)) {
+      flushParagraph({ blocks, lines: paragraphLines });
+      const thoughtLines: string[] = [];
+      index += 1;
+
+      while (index < lines.length && !thoughtClosePattern.test(lines[index]?.trim() ?? '')) {
+        thoughtLines.push(lines[index] ?? '');
+        index += 1;
+      }
+
       blocks.push({
-        type: 'code',
-        language,
-        code: codeLines.join('\n'),
+        type: 'thought',
+        text: thoughtLines.join('\n').trim(),
       });
       index += 1;
       continue;

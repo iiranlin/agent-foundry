@@ -88,8 +88,17 @@ export const trainSkillFromSources = (sources: AgentSourceInput[]): SkillTrainin
     const url = source.url ? ` (${source.url})` : '';
     return `- ${source.label || source.type}${url}`;
   });
+  const thoughtLines = [
+    `Collected ${usableSources.length} context source${usableSources.length === 1 ? '' : 's'}.`,
+    'Treat the uploaded data as the Agent context, not as a separate hidden knowledge base.',
+    'Use headings, recurring keywords, and source inventory only to make the context easier to inspect.',
+  ];
   const content = [
     `# ${title}`,
+    '',
+    '```thinking',
+    thoughtLines.join('\n'),
+    '```',
     '',
     '## Scope',
     summary,

@@ -82,6 +82,7 @@ export const POST = async (request: Request, context: RouteContext) => {
       for await (const chunk of streamCodexPlusAnswer({
         agentName: agent.name,
         endpointOverride: agent.codexApiEndpoint,
+        mcpConnectorConfig: agent.mcpConnectorUrl,
         question: parse.data.content,
         skillContent: skill.content,
         skillSummary: skill.summary,

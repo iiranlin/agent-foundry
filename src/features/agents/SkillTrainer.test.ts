@@ -15,6 +15,7 @@ describe('SkillTrainer', () => {
       expect(skill.title).toBe('Billing agent');
       expect(skill.content).toContain('Product notes');
       expect(skill.content).toContain('invoice');
+      expect(skill.content).toContain('```thinking');
     });
 
     it('keeps URL references in the source inventory', () => {

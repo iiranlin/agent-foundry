@@ -76,7 +76,7 @@ const InlineMarkdown = (props: { text: string }) => (
   </>
 );
 
-export const MarkdownMessage = (props: { content: string }) => {
+export const MarkdownMessage = (props: { content: string; thoughtLabel: string }) => {
   const blocks = parseMarkdownBlocks(props.content);
 
   return (
@@ -133,6 +133,22 @@ export const MarkdownMessage = (props: { content: string }) => {
             >
               <InlineMarkdown text={block.text} />
             </blockquote>
+          );
+        }
+
+        if (block.type === 'thought') {
+          return (
+            <details
+              className="rounded-md border border-amber-200 bg-amber-50/70 p-3 text-slate-700"
+              key={key}
+            >
+              <summary className="cursor-pointer text-xs font-semibold text-amber-800">
+                {props.thoughtLabel}
+              </summary>
+              <pre className="mt-2 overflow-auto font-mono text-xs leading-5 [overflow-wrap:anywhere] break-words whitespace-pre-wrap">
+                {block.text}
+              </pre>
+            </details>
           );
         }
 

@@ -43,12 +43,29 @@ describe('CodexPlusClient', () => {
       const answer = await requestCodexPlusAnswer({
         agentName: 'Billing Agent',
         endpointOverride: 'https://bmapi.020212.xyz',
+        mcpConnectorConfig: JSON.stringify({
+          mcpServers: {
+            docs: {
+              transport: 'http',
+              url: 'https://mcp.example.com/sse',
+            },
+          },
+        }),
         question: '发票流程是什么？',
         skillContent: '发票流程会先创建草稿发票。',
         skillSummary: '发票流程说明。',
       });
+      const requestBody = fetchMock.mock.calls[0]?.[1]?.body;
 
       expect(answer).toBe('可以回答发票流程。');
+
+      if (typeof requestBody !== 'string') {
+        throw new TypeError('Expected JSON request body.');
+      }
+
+      expect(JSON.parse(requestBody).messages[0].content).toContain(
+        '- docs: http transport at https://mcp.example.com/sse',
+      );
       expect(fetchMock).toHaveBeenCalledWith(
         'https://bmapi.020212.xyz/v1/chat/completions',
         expect.objectContaining({

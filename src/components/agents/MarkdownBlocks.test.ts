@@ -32,5 +32,27 @@ describe('MarkdownBlocks', () => {
         { type: 'quote', text: 'Important' },
       ]);
     });
+
+    it('parses expandable thought blocks', () => {
+      const blocks = parseMarkdownBlocks(
+        [
+          '<thinking>',
+          'I need to inspect the source first.',
+          '</thinking>',
+          '',
+          'Answer.',
+          '',
+          '```reasoning',
+          'Second thought.',
+          '```',
+        ].join('\n'),
+      );
+
+      expect(blocks).toStrictEqual([
+        { type: 'thought', text: 'I need to inspect the source first.' },
+        { type: 'paragraph', text: 'Answer.' },
+        { type: 'thought', text: 'Second thought.' },
+      ]);
+    });
   });
 });

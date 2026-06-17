@@ -2,6 +2,7 @@ import { desc, eq, inArray } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import * as z from 'zod';
 import { getAgentOwnerId } from '@/features/agents/AgentAuth';
+import { normalizeMcpConnectorConfig } from '@/features/agents/McpConfig';
 import { db } from '@/libs/DB';
 import {
   agentMessageSchema,
@@ -12,7 +13,7 @@ import {
 
 const AgentSourceValidation = z.object({
   type: z.enum(['text', 'markdown', 'file', 'github', 'url', 'online-skill']),
-  label: z.string().trim().min(1).max(120),
+  label: z.string().trim().max(120).optional(),
   url: z.string().trim().max(2048).optional(),
   content: z.string().trim().max(60_000),
 });
@@ -22,9 +23,21 @@ const AgentCreateValidation = z.object({
   description: z.string().trim().max(500).optional(),
   codexApiEndpoint: z.string().trim().max(2048).optional(),
   onlineSkillUrl: z.string().trim().max(2048).optional(),
-  mcpConnectorUrl: z.string().trim().max(2048).optional(),
+  mcpConnectorUrl: z.string().trim().max(12_000).optional(),
   sources: z.array(AgentSourceValidation).min(1).max(12),
 });
+
+const resolveSourceLabel = (source: z.infer<typeof AgentSourceValidation>) => {
+  if (source.label?.trim()) {
+    return source.label;
+  }
+
+  if (source.url?.trim()) {
+    return source.url;
+  }
+
+  return 'Context';
+};
 
 const toAgentPayload = (options: {
   agents: (typeof agentSchema.$inferSelect)[];
@@ -111,6 +124,20 @@ export const POST = async (request: Request) => {
     return NextResponse.json(z.treeifyError(parse.error), { status: 422 });
   }
 
+  const hasContextData = parse.data.sources.some(
+    (source) => source.content.trim() || source.url?.trim(),
+  );
+
+  if (!hasContextData) {
+    return NextResponse.json({ message: 'Context data is required' }, { status: 422 });
+  }
+
+  const mcpConfig = normalizeMcpConnectorConfig(parse.data.mcpConnectorUrl ?? '');
+
+  if (!mcpConfig.ok) {
+    return NextResponse.json({ message: mcpConfig.error }, { status: 422 });
+  }
+
   const [agent] = await db
     .insert(agentSchema)
     .values({
@@ -119,7 +146,7 @@ export const POST = async (request: Request) => {
       description: parse.data.description ?? '',
       codexApiEndpoint: parse.data.codexApiEndpoint ?? '',
       onlineSkillUrl: parse.data.onlineSkillUrl ?? '',
-      mcpConnectorUrl: parse.data.mcpConnectorUrl ?? '',
+      mcpConnectorUrl: mcpConfig.value,
     })
     .returning();
 
@@ -131,7 +158,7 @@ export const POST = async (request: Request) => {
     parse.data.sources.map((source) => ({
       agentId: agent.id,
       type: source.type,
-      label: source.label,
+      label: resolveSourceLabel(source),
       url: source.url ?? '',
       content: source.content,
     })),

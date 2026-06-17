@@ -35,7 +35,14 @@ const agentFixture: AgentRecord = {
   status: 'ready',
   codexApiEndpoint: '',
   onlineSkillUrl: '',
-  mcpConnectorUrl: '',
+  mcpConnectorUrl: JSON.stringify({
+    mcpServers: {
+      docs: {
+        transport: 'http',
+        url: 'https://mcp.example.com/sse',
+      },
+    },
+  }),
   trainedAt: '2026-06-17T01:28:55.455Z',
   createdAt: '2026-06-17T01:28:55.455Z',
   updatedAt: '2026-06-17T01:28:55.455Z',
@@ -95,9 +102,11 @@ describe('Agent workspace', () => {
       const chatLog = page.getByTestId('agent-chat-log');
       const skillContent = page.getByTestId('agent-skill-content');
       const assistantMessage = page.getByTestId('agent-message-2');
+      const mcpServer = page.getByText('docs');
 
       await expect.element(workspaceShell).toBeVisible();
       await expect.element(chatLog).toBeVisible();
+      await expect.element(mcpServer).toBeVisible();
 
       expect(workspaceShell.element().getAttribute('class') ?? '').toContain(
         'xl:h-[calc(100vh-220px)]',
