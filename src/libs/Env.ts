@@ -5,6 +5,9 @@ export const Env = createEnv({
   server: {
     ARCJET_KEY: z.string().startsWith('ajkey_').optional(),
     CLERK_SECRET_KEY: z.string().min(1),
+    CODEX_PLUS_API_BASE_URL: z.url().optional(),
+    CODEX_PLUS_API_KEY: z.string().min(1).optional(),
+    CODEX_PLUS_MODEL: z.string().min(1).default('gpt-5.5'),
     DATABASE_URL: z.string().min(1),
   },
   client: {
@@ -25,6 +28,9 @@ export const Env = createEnv({
   runtimeEnv: {
     ARCJET_KEY: process.env.ARCJET_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CODEX_PLUS_API_BASE_URL: process.env.CODEX_PLUS_API_BASE_URL,
+    CODEX_PLUS_API_KEY: process.env.CODEX_PLUS_API_KEY,
+    CODEX_PLUS_MODEL: process.env.CODEX_PLUS_MODEL,
     DATABASE_URL: process.env.DATABASE_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,

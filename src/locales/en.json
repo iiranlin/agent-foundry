@@ -1,22 +1,17 @@
 {
   "RootLayout": {
-    "home_link": "Home",
-    "about_link": "About",
-    "counter_link": "Counter",
-    "portfolio_link": "Portfolio",
+    "dashboard_link": "Workspace",
     "sign_in_link": "Sign in",
     "sign_up_link": "Sign up"
   },
   "BaseTemplate": {
-    "description": "Starter code for your Nextjs Boilerplate with Tailwind CSS",
-    "footer_text": "© {year} {name}. Made with <author></author>.",
+    "description": "Agent workspace for trained data analysis.",
+    "footer_text": "© {year} {name}.",
     "main_navigation_label": "Main navigation"
   },
   "Index": {
-    "meta_title": "Next.js Boilerplate Presentation",
-    "meta_description": "Next js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework.",
-    "sponsors_title": "Sponsors",
-    "zap_emoji_label": "Zap"
+    "meta_title": "Agent Foundry",
+    "meta_description": "Create trained agents from uploaded text, markdown, GitHub references, online skills, and third-party URLs."
   },
   "Counter": {
     "meta_title": "Counter",
@@ -60,10 +55,57 @@
     "meta_title": "Sign up",
     "meta_description": "Effortlessly create an account through our intuitive sign-up process."
   },
-  "Dashboard": {
-    "hello_message": "Hello {email}!",
-    "alternative_message": "Need advanced features? Multi-tenancy & Teams, Roles & Permissions, Shadcn UI, End-to-End Typesafety with oRPC, Stripe Payment, Light / Dark mode. Try <url></url>.",
-    "max_message": "Or, need a Self-hosted auth stack (Better Auth)? Try <url></url>."
+  "AgentWorkspace": {
+    "title": "Agent foundry",
+    "subtitle": "Sources, training, skills, and streaming chat runs.",
+    "agents_metric": "Agents",
+    "agents_panel_title": "Agents",
+    "source_panel_title": "Source intake",
+    "agent_name_label": "Agent name",
+    "agent_name_placeholder": "Product docs agent",
+    "agent_description_label": "Description",
+    "agent_description_placeholder": "What this Agent should answer",
+    "source_type_label": "Source type",
+    "source_type_markdown": "Markdown",
+    "source_type_text": "Text",
+    "source_type_file": "Local file",
+    "source_type_github": "GitHub",
+    "source_type_url": "Website URL",
+    "source_type_online_skill": "Online skill",
+    "source_label_label": "Source label",
+    "source_label_placeholder": "README.md",
+    "source_url_label": "Source URL",
+    "source_url_placeholder": "https://github.com/acme/project",
+    "source_file_label": "Upload text or markdown",
+    "source_content_label": "Training content",
+    "source_content_placeholder": "Paste txt, markdown, repository notes, or extracted website text",
+    "codex_api_placeholder": "Codex++ API endpoint",
+    "online_skill_placeholder": "Online skill URL",
+    "mcp_connector_placeholder": "MCP connector URL",
+    "create_agent_button": "Create Agent",
+    "status_draft": "Draft",
+    "status_training": "Training",
+    "status_ready": "Ready",
+    "train_agent_button": "Train",
+    "retrain_agent_button": "Retrain",
+    "sources_metric": "Sources",
+    "trained_metric": "Trained",
+    "mcp_metric": "MCP",
+    "not_trained": "Not trained",
+    "not_connected": "Not connected",
+    "skill_panel_title": "Generated skill",
+    "sources_count": "{count} sources",
+    "skills_count": "{count} skills",
+    "empty_skill": "Run training to extract this Agent's skill from the attached data.",
+    "empty_chat": "No messages yet.",
+    "chat_input_label": "Message",
+    "chat_input_placeholder": "Ask this Agent about its training data",
+    "chat_disabled_placeholder": "Train this Agent before chatting",
+    "send_message_button": "Send",
+    "streaming_button": "Streaming",
+    "streaming_label": "Streaming response...",
+    "empty_state_title": "Create your first Agent",
+    "empty_state_subtitle": "Add a data source, trigger manual training, then enter the conversation when the Agent is ready."
   },
   "DashboardLayout": {
     "meta_title": "Dashboard",
@@ -73,6 +115,8 @@
     "sign_out": "Sign out"
   },
   "LocaleSwitcher": {
-    "change_language": "Change language"
+    "change_language": "Change language",
+    "language_zh": "中文",
+    "language_en": "English"
   }
 }

@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@chromatic-com/playwright": "^0.14.2",
+    "@clerk/shared": "^4.18.0",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@commitlint/prompt-cli": "^21.0.1",
@@ -88,6 +89,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
     "ultracite": "^7.7.0",
+    "vite": "^8.0.16",
     "vitest": "^4.1.7",
     "vitest-browser-react": "^2.2.0"
   },

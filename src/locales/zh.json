@@ -1,0 +1,122 @@
+{
+  "RootLayout": {
+    "dashboard_link": "工作区",
+    "sign_in_link": "登录",
+    "sign_up_link": "注册"
+  },
+  "BaseTemplate": {
+    "description": "用于训练数据分析的 Agent 工作区。",
+    "footer_text": "© {year} {name}.",
+    "main_navigation_label": "主导航"
+  },
+  "Index": {
+    "meta_title": "Agent Foundry",
+    "meta_description": "基于上传文本、Markdown、GitHub 引用、在线技能和第三方 URL 创建经过训练的 Agent。"
+  },
+  "Counter": {
+    "meta_title": "计数器",
+    "meta_description": "数据库操作示例",
+    "security_powered_by": "安全防护、机器人检测和限流由以下服务提供"
+  },
+  "CounterForm": {
+    "presentation": "计数器存储在数据库中，并会按你提供的数值递增。",
+    "label_increment": "递增数值",
+    "button_increment": "递增",
+    "error_increment_range": "数值必须在 1 到 3 之间"
+  },
+  "CurrentCount": {
+    "count": "计数：{count}"
+  },
+  "About": {
+    "meta_title": "关于",
+    "meta_description": "关于页面描述",
+    "about_paragraph": "欢迎来到关于页面！我们是一支热衷于打造优秀软件的团队。",
+    "translation_powered_by": "翻译由以下服务提供"
+  },
+  "Portfolio": {
+    "meta_title": "作品集",
+    "meta_description": "欢迎访问我的作品集页面！",
+    "presentation": "欢迎访问我的作品集页面！这里汇集了我精心整理的工作成果和项目经历。通过这个作品集，我希望展示自己的专业能力、创造力，以及能为你的项目带来的价值。",
+    "portfolio_name": "作品集 {name}",
+    "error_reporting_powered_by": "错误报告由以下服务提供"
+  },
+  "PortfolioSlug": {
+    "meta_title": "作品集 {slug}",
+    "meta_description": "作品集 {slug} 描述",
+    "header": "作品集 {slug}",
+    "content": "为企业活动创建了一组宣传材料和品牌元素。设计了统一的视觉主题，包括标志、海报、横幅和数字资产。在保留客户品牌识别度的同时，融入了现代且创新的表达方式。",
+    "code_review_powered_by": "代码审查由以下服务提供"
+  },
+  "SignIn": {
+    "meta_title": "登录",
+    "meta_description": "通过清晰易用的登录流程访问你的账号。"
+  },
+  "SignUp": {
+    "meta_title": "注册",
+    "meta_description": "通过直观的注册流程轻松创建账号。"
+  },
+  "AgentWorkspace": {
+    "title": "Agent 工坊",
+    "subtitle": "统一管理数据源、训练、技能和流式对话。",
+    "agents_metric": "Agent",
+    "agents_panel_title": "Agent",
+    "source_panel_title": "数据源接入",
+    "agent_name_label": "Agent 名称",
+    "agent_name_placeholder": "产品文档 Agent",
+    "agent_description_label": "描述",
+    "agent_description_placeholder": "这个 Agent 应该回答什么",
+    "source_type_label": "数据源类型",
+    "source_type_markdown": "Markdown",
+    "source_type_text": "文本",
+    "source_type_file": "本地文件",
+    "source_type_github": "GitHub",
+    "source_type_url": "网站 URL",
+    "source_type_online_skill": "在线技能",
+    "source_label_label": "数据源标签",
+    "source_label_placeholder": "README.md",
+    "source_url_label": "数据源 URL",
+    "source_url_placeholder": "https://github.com/acme/project",
+    "source_file_label": "上传文本或 Markdown",
+    "source_content_label": "训练内容",
+    "source_content_placeholder": "粘贴 txt、Markdown、仓库说明或从网站提取的文本",
+    "codex_api_placeholder": "Codex++ API 端点",
+    "online_skill_placeholder": "在线技能 URL",
+    "mcp_connector_placeholder": "MCP 连接器 URL",
+    "create_agent_button": "创建 Agent",
+    "status_draft": "草稿",
+    "status_training": "训练中",
+    "status_ready": "就绪",
+    "train_agent_button": "训练",
+    "retrain_agent_button": "重新训练",
+    "sources_metric": "数据源",
+    "trained_metric": "训练状态",
+    "mcp_metric": "MCP",
+    "not_trained": "未训练",
+    "not_connected": "未连接",
+    "skill_panel_title": "生成的技能",
+    "sources_count": "{count} 个数据源",
+    "skills_count": "{count} 个技能",
+    "empty_skill": "运行训练后，会从已附加数据中提取这个 Agent 的技能。",
+    "empty_chat": "还没有消息。",
+    "chat_input_label": "消息",
+    "chat_input_placeholder": "询问这个 Agent 的训练数据",
+    "chat_disabled_placeholder": "先训练这个 Agent，然后再开始对话",
+    "send_message_button": "发送",
+    "streaming_button": "生成中",
+    "streaming_label": "正在生成回复...",
+    "empty_state_title": "创建你的第一个 Agent",
+    "empty_state_subtitle": "添加数据源，触发手动训练，然后在 Agent 就绪后开始对话。"
+  },
+  "DashboardLayout": {
+    "meta_title": "仪表盘",
+    "meta_description": "在仪表盘中管理你的账号。",
+    "dashboard_link": "仪表盘",
+    "user_profile_link": "管理你的账号",
+    "sign_out": "退出登录"
+  },
+  "LocaleSwitcher": {
+    "change_language": "切换语言",
+    "language_zh": "中文",
+    "language_en": "English"
+  }
+}

@@ -7,7 +7,7 @@ test.describe('Visual testing', () => {
 
       await expect(
         page.getByRole('heading', {
-          name: 'Boilerplate Code for Your Next.js Project with Tailwind CSS',
+          name: 'Agent 工坊',
         }),
       ).toBeVisible();
 
@@ -17,7 +17,7 @@ test.describe('Visual testing', () => {
     test('should take screenshot of the portfolio page', async ({ page }, testInfo) => {
       await page.goto('/portfolio');
 
-      await expect(page.getByText('Welcome to my portfolio page!')).toBeVisible();
+      await expect(page.getByText('欢迎访问我的作品集页面！')).toBeVisible();
 
       await takeSnapshot(page, testInfo);
     });
@@ -25,7 +25,7 @@ test.describe('Visual testing', () => {
     test('should take screenshot of the about page', async ({ page }, testInfo) => {
       await page.goto('/about');
 
-      await expect(page.getByText('Welcome to our About page!')).toBeVisible();
+      await expect(page.getByText('欢迎来到关于页面！')).toBeVisible();
 
       await takeSnapshot(page, testInfo);
     });
@@ -33,17 +33,17 @@ test.describe('Visual testing', () => {
     test('should take screenshot of the portfolio details page', async ({ page }, testInfo) => {
       await page.goto('/portfolio/2');
 
-      await expect(page.getByText('Created a set of promotional')).toBeVisible();
+      await expect(page.getByText('为企业活动创建了一组宣传材料')).toBeVisible();
 
       await takeSnapshot(page, testInfo);
     });
 
-    test('should take screenshot of the French homepage', async ({ page }, testInfo) => {
-      await page.goto('/fr');
+    test('should take screenshot of the English homepage', async ({ page }, testInfo) => {
+      await page.goto('/en');
 
       await expect(
         page.getByRole('heading', {
-          name: 'Code de démarrage pour Next.js avec Tailwind CSS',
+          name: 'Agent foundry',
         }),
       ).toBeVisible();
 

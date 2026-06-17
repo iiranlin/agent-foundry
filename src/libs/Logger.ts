@@ -24,6 +24,7 @@ const canForwardToBetterStack =
   Boolean(Env.NEXT_PUBLIC_BETTER_STACK_INGESTING_HOST);
 
 await configure({
+  reset: true,
   sinks: {
     console: getConsoleSink({ formatter: getJsonLinesFormatter() }),
     betterStack: fromAsyncSink(betterStackSink),
